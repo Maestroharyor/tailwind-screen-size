@@ -245,6 +245,8 @@ var defaultBreakpoints = [
   { screenTitle: "2XL", minWidth: 1536 }
 ];
 var isDevelopment = () => {
+  if (typeof process === "undefined")
+    return false;
   return process.env.NODE_ENV === "development";
 };
 var baseClasses = {
@@ -265,9 +267,10 @@ var TailwindScreenSize = ({
   hideNoTailwindCSSWarning = false
 }) => {
   const [mounted, setMounted] = useState(false);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const [dimensions, setDimensions] = useState(null);
   const [currentBreakpoint, setCurrentBreakpoint] = useState("");
   const [hasTailwind, setHasTailwind] = useState(true);
+  const [isDevMode, setIsDevMode] = useState(false);
   const allBreakpoints = useMemo(() => {
     const customBreakpoints = breakpoints || [];
     if (!showDefaultBreakpoints)
@@ -278,31 +281,36 @@ var TailwindScreenSize = ({
   }, [breakpoints, showDefaultBreakpoints]);
   useEffect(() => {
     setMounted(true);
-    const tailwindDetected = detectTailwind();
-    setHasTailwind(tailwindDetected);
+    setIsDevMode(isDevelopment());
+    if (typeof window !== "undefined") {
+      const tailwindDetected = detectTailwind();
+      setHasTailwind(tailwindDetected);
+    }
+  }, []);
+  useEffect(() => {
+    if (!mounted)
+      return;
     const updateDimensions = () => {
-      if (typeof window !== "undefined") {
-        setDimensions({
-          width: window.innerWidth,
-          height: window.innerHeight
-        });
-      }
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
     };
     updateDimensions();
     window.addEventListener("resize", updateDimensions);
     return () => window.removeEventListener("resize", updateDimensions);
-  }, []);
+  }, [mounted]);
   useEffect(() => {
-    if (mounted) {
+    if (mounted && dimensions) {
       const current = allBreakpoints.slice().reverse().find((breakpoint) => dimensions.width >= breakpoint.minWidth);
       setCurrentBreakpoint(current?.screenTitle || "");
     }
-  }, [dimensions.width, allBreakpoints, mounted]);
-  if (!mounted)
+  }, [dimensions, allBreakpoints, mounted]);
+  if (!mounted || !dimensions)
     return null;
   if (show === false)
     return null;
-  if (!isDevelopment() && show !== true)
+  if (!isDevMode && show !== true)
     return null;
   const { width, height } = dimensions;
   const themeStyles = themeClasses[theme];

@@ -456,6 +456,7 @@ var defaultBreakpoints = [
     }
 ];
 var isDevelopment = function() {
+    if (typeof process === "undefined") return false;
     return process.env.NODE_ENV === "development";
 };
 var baseClasses = {
@@ -465,12 +466,10 @@ var baseClasses = {
 var TailwindScreenSize = function(param) {
     var _param_className = param.className, className = _param_className === void 0 ? "" : _param_className, _param_position = param.position, position = _param_position === void 0 ? "bottom-right" : _param_position, _param_theme = param.theme, theme = _param_theme === void 0 ? "dark" : _param_theme, show = param.show, _param_containerClassName = param.containerClassName, containerClassName = _param_containerClassName === void 0 ? "" : _param_containerClassName, _param_textClassName = param.textClassName, textClassName = _param_textClassName === void 0 ? "" : _param_textClassName, _param_dividerClassName = param.dividerClassName, dividerClassName = _param_dividerClassName === void 0 ? "" : _param_dividerClassName, _param_breakpointClassName = param.breakpointClassName, breakpointClassName = _param_breakpointClassName === void 0 ? "" : _param_breakpointClassName, breakpoints = param.breakpoints, _param_showDefaultBreakpoints = param.showDefaultBreakpoints, showDefaultBreakpoints = _param_showDefaultBreakpoints === void 0 ? true : _param_showDefaultBreakpoints, _param_hideNoTailwindCSSWarning = param.hideNoTailwindCSSWarning, hideNoTailwindCSSWarning = _param_hideNoTailwindCSSWarning === void 0 ? false : _param_hideNoTailwindCSSWarning;
     var _ref = _sliced_to_array((0, import_react.useState)(false), 2), mounted = _ref[0], setMounted = _ref[1];
-    var _ref1 = _sliced_to_array((0, import_react.useState)({
-        width: 0,
-        height: 0
-    }), 2), dimensions = _ref1[0], setDimensions = _ref1[1];
+    var _ref1 = _sliced_to_array((0, import_react.useState)(null), 2), dimensions = _ref1[0], setDimensions = _ref1[1];
     var _ref2 = _sliced_to_array((0, import_react.useState)(""), 2), currentBreakpoint = _ref2[0], setCurrentBreakpoint = _ref2[1];
     var _ref3 = _sliced_to_array((0, import_react.useState)(true), 2), hasTailwind = _ref3[0], setHasTailwind = _ref3[1];
+    var _ref4 = _sliced_to_array((0, import_react.useState)(false), 2), isDevMode = _ref4[0], setIsDevMode = _ref4[1];
     var allBreakpoints = (0, import_react.useMemo)(function() {
         var customBreakpoints = breakpoints || [];
         if (!showDefaultBreakpoints) return customBreakpoints;
@@ -483,37 +482,43 @@ var TailwindScreenSize = function(param) {
     ]);
     (0, import_react.useEffect)(function() {
         setMounted(true);
-        var tailwindDetected = detectTailwind();
-        setHasTailwind(tailwindDetected);
+        setIsDevMode(isDevelopment());
+        if (typeof window !== "undefined") {
+            var tailwindDetected = detectTailwind();
+            setHasTailwind(tailwindDetected);
+        }
+    }, []);
+    (0, import_react.useEffect)(function() {
+        if (!mounted) return;
         var updateDimensions = function() {
-            if (typeof window !== "undefined") {
-                setDimensions({
-                    width: window.innerWidth,
-                    height: window.innerHeight
-                });
-            }
+            setDimensions({
+                width: window.innerWidth,
+                height: window.innerHeight
+            });
         };
         updateDimensions();
         window.addEventListener("resize", updateDimensions);
         return function() {
             return window.removeEventListener("resize", updateDimensions);
         };
-    }, []);
+    }, [
+        mounted
+    ]);
     (0, import_react.useEffect)(function() {
-        if (mounted) {
+        if (mounted && dimensions) {
             var current = allBreakpoints.slice().reverse().find(function(breakpoint) {
                 return dimensions.width >= breakpoint.minWidth;
             });
             setCurrentBreakpoint((current === null || current === void 0 ? void 0 : current.screenTitle) || "");
         }
     }, [
-        dimensions.width,
+        dimensions,
         allBreakpoints,
         mounted
     ]);
-    if (!mounted) return null;
+    if (!mounted || !dimensions) return null;
     if (show === false) return null;
-    if (!isDevelopment() && show !== true) return null;
+    if (!isDevMode && show !== true) return null;
     var width = dimensions.width, height = dimensions.height;
     var themeStyles = themeClasses[theme];
     return /* @__PURE__ */ import_react.default.createElement("div", {

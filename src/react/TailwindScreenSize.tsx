@@ -195,6 +195,7 @@ const defaultBreakpoints: Breakpoint[] = [
 ];
 
 const isDevelopment = () => {
+  if (typeof process === 'undefined') return false;
   return process.env.NODE_ENV === "development";
 };
 
@@ -218,9 +219,10 @@ export const TailwindScreenSize: React.FC<TailwindScreenSizeProps> = ({
   hideNoTailwindCSSWarning = false,
 }) => {
   const [mounted, setMounted] = useState(false);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const [dimensions, setDimensions] = useState<{ width: number; height: number } | null>(null);
   const [currentBreakpoint, setCurrentBreakpoint] = useState<string>("");
   const [hasTailwind, setHasTailwind] = useState(true);
+  const [isDevMode, setIsDevMode] = useState(false);
 
   const allBreakpoints = useMemo(() => {
     const customBreakpoints = breakpoints || [];
@@ -232,42 +234,49 @@ export const TailwindScreenSize: React.FC<TailwindScreenSizeProps> = ({
 
   useEffect(() => {
     setMounted(true);
-    const tailwindDetected = detectTailwind();
-    setHasTailwind(tailwindDetected);
+    setIsDevMode(isDevelopment());
+    
+    // Only run Tailwind detection on client
+    if (typeof window !== 'undefined') {
+      const tailwindDetected = detectTailwind();
+      setHasTailwind(tailwindDetected);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
 
     const updateDimensions = () => {
-      if (typeof window !== "undefined") {
-        setDimensions({
-          width: window.innerWidth,
-          height: window.innerHeight,
-        });
-      }
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
     };
 
     updateDimensions();
     window.addEventListener("resize", updateDimensions);
 
     return () => window.removeEventListener("resize", updateDimensions);
-  }, []);
+  }, [mounted]);
 
   useEffect(() => {
-    if (mounted) {
+    if (mounted && dimensions) {
       const current = allBreakpoints
         .slice()
         .reverse()
         .find((breakpoint) => dimensions.width >= breakpoint.minWidth);
       setCurrentBreakpoint(current?.screenTitle || "");
     }
-  }, [dimensions.width, allBreakpoints, mounted]);
+  }, [dimensions, allBreakpoints, mounted]);
 
-  // Don't render anything on the server or before mounting
-  if (!mounted) return null;
+  // Don't render during SSR or before mounting
+  if (!mounted || !dimensions) return null;
 
-  // Don't render if show is explicitly set to false, regardless of environment
+  // Don't render if show is explicitly set to false
   if (show === false) return null;
 
-  // Don't render if not in development unless show is explicitly set to true
-  if (!isDevelopment() && show !== true) return null;
+  // Don't render in production unless explicitly shown
+  if (!isDevMode && show !== true) return null;
 
   const { width, height } = dimensions;
   const themeStyles = themeClasses[theme];
