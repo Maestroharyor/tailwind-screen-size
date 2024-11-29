@@ -1,6 +1,6 @@
 {
   "name": "tailwind-screen-size",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A framework-agnostic screen size indicator optimized for TailwindCSS but customizable for any CSS framework. Features real-time dimensions, breakpoints, themes, and development tools.",
   "main": "./react/index.js",
   "module": "./react/index.mjs",

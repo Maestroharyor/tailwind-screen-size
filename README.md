@@ -17,31 +17,57 @@ A lightweight, framework-agnostic component that helps you visualize your screen
 ## 📦 Installation
 
 Using npm:
+
 ```bash
 npm install tailwind-screen-size
 ```
 
 Using yarn:
+
 ```bash
 yarn add tailwind-screen-size
 ```
 
 Using pnpm:
+
 ```bash
 pnpm add tailwind-screen-size
 ```
 
 Using bun:
+
 ```bash
 bun add tailwind-screen-size
 ```
+
+## 🔧 Tailwind CSS Configuration
+
+### For Tailwind CSS v3 and below
+
+Add the following to your `tailwind.config.js` or `tailwind.config.ts`:
+
+```javascript
+content: [
+  "./node_modules/tailwind-screen-size/**/*.{js,ts,jsx,tsx,vue,svelte}",
+];
+```
+
+### For Tailwind CSS v4.0 (Beta)
+
+Add the following to your `styles.css`:
+
+```css
+@source "./node_modules/tailwind-screen-size/**/*.{js,ts,jsx,tsx,vue,svelte}";
+```
+
+> Note: This package is compatible with Tailwind CSS 4.0.
 
 ## 🚀 Usage
 
 ### React
 
 ```jsx
-import { TailwindScreenSize } from 'tailwind-screen-size';
+import { TailwindScreenSize } from "tailwind-screen-size/react";
 
 function App() {
   return (
@@ -55,19 +81,19 @@ function App() {
 
 ### ⚙️ Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `position` | `'top-left' \| 'top-right' \| 'top-center' \| 'bottom-left' \| 'bottom-right' \| 'bottom-center'` | `'bottom-right'` | Position of the screen size indicator |
-| `theme` | See [Available Themes](#available-themes) | `'dark'` | Visual theme of the indicator |
-| `show` | `boolean` | `undefined` | Force show/hide the indicator. By default, only shows in development |
-| `breakpoints` | `Array<{ screenTitle: string; minWidth: number }>` | See [Default Breakpoints](#default-breakpoints) | Custom breakpoints configuration |
-| `showDefaultBreakpoints` | `boolean` | `true` | Whether to show the default Tailwind breakpoints |
-| `hideNoTailwindCSSWarning` | `boolean` | `false` | Hide the "No TailwindCSS" warning |
-| `className` | `string` | `''` | Additional classes for the entire component |
-| `containerClassName` | `string` | `''` | Additional classes for the container |
-| `textClassName` | `string` | `''` | Additional classes for the dimension text |
-| `dividerClassName` | `string` | `''` | Additional classes for the divider |
-| `breakpointClassName` | `string` | `''` | Additional classes for the breakpoint indicators |
+| Prop                       | Type                                                                                              | Default                                         | Description                                                          |
+| -------------------------- | ------------------------------------------------------------------------------------------------- | ----------------------------------------------- | -------------------------------------------------------------------- |
+| `position`                 | `'top-left' \| 'top-right' \| 'top-center' \| 'bottom-left' \| 'bottom-right' \| 'bottom-center'` | `'bottom-right'`                                | Position of the screen size indicator                                |
+| `theme`                    | See [Available Themes](#available-themes)                                                         | `'dark'`                                        | Visual theme of the indicator                                        |
+| `show`                     | `boolean`                                                                                         | `undefined`                                     | Force show/hide the indicator. By default, only shows in development |
+| `breakpoints`              | `Array<{ screenTitle: string; minWidth: number }>`                                                | See [Default Breakpoints](#default-breakpoints) | Custom breakpoints configuration                                     |
+| `showDefaultBreakpoints`   | `boolean`                                                                                         | `true`                                          | Whether to show the default Tailwind breakpoints                     |
+| `hideNoTailwindCSSWarning` | `boolean`                                                                                         | `false`                                         | Hide the "No TailwindCSS" warning                                    |
+| `className`                | `string`                                                                                          | `''`                                            | Additional classes for the entire component                          |
+| `containerClassName`       | `string`                                                                                          | `''`                                            | Additional classes for the container                                 |
+| `textClassName`            | `string`                                                                                          | `''`                                            | Additional classes for the dimension text                            |
+| `dividerClassName`         | `string`                                                                                          | `''`                                            | Additional classes for the divider                                   |
+| `breakpointClassName`      | `string`                                                                                          | `''`                                            | Additional classes for the breakpoint indicators                     |
 
 ### 🎨 Customization
 
@@ -75,26 +101,20 @@ function App() {
 <TailwindScreenSize
   // Position: 'top-left' | 'top-right' | 'top-center' | 'bottom-left' | 'bottom-right' | 'bottom-center'
   position="bottom-right"
-  
   // Theme: See Available Themes section
   theme="blue"
-  
   // Control visibility (defaults to development only)
   show={true}
-  
   // Custom breakpoints
   breakpoints={[
     { screenTitle: "mobile", minWidth: 320 },
     { screenTitle: "tablet", minWidth: 768 },
     { screenTitle: "desktop", minWidth: 1024 },
   ]}
-  
   // Show/hide default Tailwind breakpoints
   showDefaultBreakpoints={false}
-  
   // Hide "No TailwindCSS" warning
   hideNoTailwindCSSWarning={false}
-  
   // Custom classes (works with any CSS framework or vanilla CSS)
   className="custom-container-class"
   containerClassName="custom-container-class"
@@ -107,15 +127,18 @@ function App() {
 ### 🎭 Available Themes
 
 #### Base Themes
+
 - 🌑 `dark` - Dark background with light text
 - 🌕 `light` - Light background with dark text
 - ✨ `glass` - Frosted glass effect with backdrop blur
 - 🎯 `minimal` - Transparent background with adaptive colors
 
 #### Color Themes
+
 All Tailwind colors are available as themes:
 
 ##### Gray Scales
+
 - `slate` - Sophisticated gray
 - `gray` - Pure gray
 - `zinc` - Neutral gray
@@ -123,6 +146,7 @@ All Tailwind colors are available as themes:
 - `stone` - Warm gray
 
 ##### Colors
+
 - `red` - Error, danger, passion
 - `orange` - Energy, creativity
 - `amber` - Warning, warmth
