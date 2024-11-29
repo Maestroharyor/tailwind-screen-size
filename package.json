@@ -1,17 +1,22 @@
 {
   "name": "tailwind-screen-size",
-  "version": "1.0.3-beta.0",
+  "version": "1.0.3-beta.1",
   "description": "A framework-agnostic screen size indicator optimized for TailwindCSS but customizable for any CSS framework. Features real-time dimensions, breakpoints, themes, and development tools.",
   "main": "./react/index.js",
   "module": "./react/index.mjs",
   "types": "./react/index.d.ts",
   "exports": {
-    ".": "./react/index.js",
+    ".": {
+      "types": "./react/index.d.ts",
+      "import": "./react/index.mjs",
+      "require": "./react/index.js"
+    },
     "./react": {
       "types": "./react/index.d.ts",
       "import": "./react/index.mjs",
       "require": "./react/index.js"
-    }
+    },
+    "./styles.css": "./react/styles.css"
   },
   "repository": {
     "type": "git",
@@ -22,7 +27,8 @@
     "url": "https://github.com/maestroharyor/tailwind-screen-size/issues"
   },
   "files": [
-    "react"
+    "react",
+    "react/styles.css"
   ],
   "scripts": {
     "build": "tsup",

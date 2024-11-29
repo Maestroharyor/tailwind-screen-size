@@ -8,6 +8,7 @@ import type {
   Breakpoint,
 } from "./types";
 import { detectTailwind } from "./utils";
+import "./styles.css";
 
 const positionClasses: Record<Position, string> = {
   "top-left": "top-5 left-5",

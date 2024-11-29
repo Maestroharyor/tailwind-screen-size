@@ -263,6 +263,7 @@ function showTailwindWarning() {
     console.warn("%cTailwind Screen Size Warning: Tailwind CSS not detected. \nThis component is designed to work with Tailwind CSS. \nPlease ensure you have Tailwind CSS properly installed in your project.\nVisit https://tailwindcss.com/docs/installation for installation instructions.", "color: #f59e0b; font-weight: bold;");
 }
 // src/react/TailwindScreenSize.tsx
+var import_styles = require("./styles-S4FDM4XE.css");
 var positionClasses = {
     "top-left": "top-5 left-5",
     "top-right": "top-5 right-5",

@@ -7,4 +7,7 @@ export default defineConfig({
   clean: true,
   external: ['react'],
   outDir: 'react',
+  loader: {
+    '.css': 'copy'
+  }
 });
