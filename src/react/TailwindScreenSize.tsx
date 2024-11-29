@@ -217,8 +217,8 @@ export const TailwindScreenSize: React.FC<TailwindScreenSizeProps> = ({
   showDefaultBreakpoints = true,
   hideNoTailwindCSSWarning = false,
 }) => {
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [mounted, setMounted] = useState(false);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [currentBreakpoint, setCurrentBreakpoint] = useState<string>("");
   const [hasTailwind, setHasTailwind] = useState(true);
 
@@ -235,29 +235,32 @@ export const TailwindScreenSize: React.FC<TailwindScreenSizeProps> = ({
     const tailwindDetected = detectTailwind();
     setHasTailwind(tailwindDetected);
 
-    function updateDimensions() {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      setDimensions({ width, height });
-
-      // Find the current breakpoint
-      const current =
-        allBreakpoints
-          .slice()
-          .reverse()
-          .find((bp) => width >= bp.minWidth)?.screenTitle || "";
-      setCurrentBreakpoint(current);
-    }
+    const updateDimensions = () => {
+      if (typeof window !== "undefined") {
+        setDimensions({
+          width: window.innerWidth,
+          height: window.innerHeight,
+        });
+      }
+    };
 
     updateDimensions();
     window.addEventListener("resize", updateDimensions);
 
-    return () => {
-      window.removeEventListener("resize", updateDimensions);
-    };
-  }, [allBreakpoints]);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
 
-  // Don't render anything on the server
+  useEffect(() => {
+    if (mounted) {
+      const current = allBreakpoints
+        .slice()
+        .reverse()
+        .find((breakpoint) => dimensions.width >= breakpoint.minWidth);
+      setCurrentBreakpoint(current?.screenTitle || "");
+    }
+  }, [dimensions.width, allBreakpoints, mounted]);
+
+  // Don't render anything on the server or before mounting
   if (!mounted) return null;
 
   // Don't render if show is explicitly set to false, regardless of environment

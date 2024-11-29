@@ -264,8 +264,8 @@ var TailwindScreenSize = ({
   showDefaultBreakpoints = true,
   hideNoTailwindCSSWarning = false
 }) => {
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [mounted, setMounted] = useState(false);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [currentBreakpoint, setCurrentBreakpoint] = useState("");
   const [hasTailwind, setHasTailwind] = useState(true);
   const allBreakpoints = useMemo(() => {
@@ -280,19 +280,24 @@ var TailwindScreenSize = ({
     setMounted(true);
     const tailwindDetected = detectTailwind();
     setHasTailwind(tailwindDetected);
-    function updateDimensions() {
-      const width2 = window.innerWidth;
-      const height2 = window.innerHeight;
-      setDimensions({ width: width2, height: height2 });
-      const current = allBreakpoints.slice().reverse().find((bp) => width2 >= bp.minWidth)?.screenTitle || "";
-      setCurrentBreakpoint(current);
-    }
+    const updateDimensions = () => {
+      if (typeof window !== "undefined") {
+        setDimensions({
+          width: window.innerWidth,
+          height: window.innerHeight
+        });
+      }
+    };
     updateDimensions();
     window.addEventListener("resize", updateDimensions);
-    return () => {
-      window.removeEventListener("resize", updateDimensions);
-    };
-  }, [allBreakpoints]);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
+  useEffect(() => {
+    if (mounted) {
+      const current = allBreakpoints.slice().reverse().find((breakpoint) => dimensions.width >= breakpoint.minWidth);
+      setCurrentBreakpoint(current?.screenTitle || "");
+    }
+  }, [dimensions.width, allBreakpoints, mounted]);
   if (!mounted)
     return null;
   if (show === false)

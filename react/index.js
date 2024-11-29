@@ -464,11 +464,11 @@ var baseClasses = {
 };
 var TailwindScreenSize = function(param) {
     var _param_className = param.className, className = _param_className === void 0 ? "" : _param_className, _param_position = param.position, position = _param_position === void 0 ? "bottom-right" : _param_position, _param_theme = param.theme, theme = _param_theme === void 0 ? "dark" : _param_theme, show = param.show, _param_containerClassName = param.containerClassName, containerClassName = _param_containerClassName === void 0 ? "" : _param_containerClassName, _param_textClassName = param.textClassName, textClassName = _param_textClassName === void 0 ? "" : _param_textClassName, _param_dividerClassName = param.dividerClassName, dividerClassName = _param_dividerClassName === void 0 ? "" : _param_dividerClassName, _param_breakpointClassName = param.breakpointClassName, breakpointClassName = _param_breakpointClassName === void 0 ? "" : _param_breakpointClassName, breakpoints = param.breakpoints, _param_showDefaultBreakpoints = param.showDefaultBreakpoints, showDefaultBreakpoints = _param_showDefaultBreakpoints === void 0 ? true : _param_showDefaultBreakpoints, _param_hideNoTailwindCSSWarning = param.hideNoTailwindCSSWarning, hideNoTailwindCSSWarning = _param_hideNoTailwindCSSWarning === void 0 ? false : _param_hideNoTailwindCSSWarning;
-    var _ref = _sliced_to_array((0, import_react.useState)({
+    var _ref = _sliced_to_array((0, import_react.useState)(false), 2), mounted = _ref[0], setMounted = _ref[1];
+    var _ref1 = _sliced_to_array((0, import_react.useState)({
         width: 0,
         height: 0
-    }), 2), dimensions = _ref[0], setDimensions = _ref[1];
-    var _ref1 = _sliced_to_array((0, import_react.useState)(false), 2), mounted = _ref1[0], setMounted = _ref1[1];
+    }), 2), dimensions = _ref1[0], setDimensions = _ref1[1];
     var _ref2 = _sliced_to_array((0, import_react.useState)(""), 2), currentBreakpoint = _ref2[0], setCurrentBreakpoint = _ref2[1];
     var _ref3 = _sliced_to_array((0, import_react.useState)(true), 2), hasTailwind = _ref3[0], setHasTailwind = _ref3[1];
     var allBreakpoints = (0, import_react.useMemo)(function() {
@@ -482,29 +482,34 @@ var TailwindScreenSize = function(param) {
         showDefaultBreakpoints
     ]);
     (0, import_react.useEffect)(function() {
-        var updateDimensions = function updateDimensions() {
-            var _allBreakpoints_slice_reverse_find;
-            var width2 = window.innerWidth;
-            var height2 = window.innerHeight;
-            setDimensions({
-                width: width2,
-                height: height2
-            });
-            var current = ((_allBreakpoints_slice_reverse_find = allBreakpoints.slice().reverse().find(function(bp) {
-                return width2 >= bp.minWidth;
-            })) === null || _allBreakpoints_slice_reverse_find === void 0 ? void 0 : _allBreakpoints_slice_reverse_find.screenTitle) || "";
-            setCurrentBreakpoint(current);
-        };
         setMounted(true);
         var tailwindDetected = detectTailwind();
         setHasTailwind(tailwindDetected);
+        var updateDimensions = function() {
+            if (typeof window !== "undefined") {
+                setDimensions({
+                    width: window.innerWidth,
+                    height: window.innerHeight
+                });
+            }
+        };
         updateDimensions();
         window.addEventListener("resize", updateDimensions);
         return function() {
-            window.removeEventListener("resize", updateDimensions);
+            return window.removeEventListener("resize", updateDimensions);
         };
+    }, []);
+    (0, import_react.useEffect)(function() {
+        if (mounted) {
+            var current = allBreakpoints.slice().reverse().find(function(breakpoint) {
+                return dimensions.width >= breakpoint.minWidth;
+            });
+            setCurrentBreakpoint((current === null || current === void 0 ? void 0 : current.screenTitle) || "");
+        }
     }, [
-        allBreakpoints
+        dimensions.width,
+        allBreakpoints,
+        mounted
     ]);
     if (!mounted) return null;
     if (show === false) return null;
