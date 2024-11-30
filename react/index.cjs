@@ -1,9 +1,48 @@
+"use strict";
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+// src/react/index.ts
+var react_exports = {};
+__export(react_exports, {
+  TailwindScreenSize: () => TailwindScreenSize,
+  detectTailwind: () => detectTailwind,
+  showTailwindWarning: () => showTailwindWarning
+});
+module.exports = __toCommonJS(react_exports);
+
 // src/react/TailwindScreenSize.tsx
-import React, { useEffect, useState, useMemo } from "react";
-import { twMerge } from "tailwind-merge";
+var import_react = __toESM(require("react"), 1);
+var import_tailwind_merge = require("tailwind-merge");
 
 // src/utils/index.ts
 function detectTailwind() {
+  var _a;
   if (typeof window === "undefined")
     return true;
   const tailwindClasses = [
@@ -27,7 +66,7 @@ function detectTailwind() {
   try {
     for (const sheet of styleSheets) {
       try {
-        if (!sheet.href?.includes(window.location.origin))
+        if (!((_a = sheet.href) == null ? void 0 : _a.includes(window.location.origin)))
           continue;
         const rules = Array.from(sheet.cssRules);
         for (const rule of rules) {
@@ -54,7 +93,7 @@ function detectTailwind() {
       }
     }
     return false;
-  } catch {
+  } catch (e) {
     console.warn("Error detecting Tailwind CSS");
     return true;
   }
@@ -266,12 +305,12 @@ var TailwindScreenSize = ({
   showDefaultBreakpoints = true,
   hideNoTailwindCSSWarning = false
 }) => {
-  const [mounted, setMounted] = useState(false);
-  const [dimensions, setDimensions] = useState(null);
-  const [currentBreakpoint, setCurrentBreakpoint] = useState("");
-  const [hasTailwind, setHasTailwind] = useState(true);
-  const [isDevMode, setIsDevMode] = useState(false);
-  const allBreakpoints = useMemo(() => {
+  const [mounted, setMounted] = (0, import_react.useState)(false);
+  const [dimensions, setDimensions] = (0, import_react.useState)(null);
+  const [currentBreakpoint, setCurrentBreakpoint] = (0, import_react.useState)("");
+  const [hasTailwind, setHasTailwind] = (0, import_react.useState)(true);
+  const [isDevMode, setIsDevMode] = (0, import_react.useState)(false);
+  const allBreakpoints = (0, import_react.useMemo)(() => {
     const customBreakpoints = breakpoints || [];
     if (!showDefaultBreakpoints)
       return customBreakpoints;
@@ -279,7 +318,7 @@ var TailwindScreenSize = ({
       (a, b) => a.minWidth - b.minWidth
     );
   }, [breakpoints, showDefaultBreakpoints]);
-  useEffect(() => {
+  (0, import_react.useEffect)(() => {
     setMounted(true);
     setIsDevMode(isDevelopment());
     if (typeof window !== "undefined") {
@@ -287,7 +326,7 @@ var TailwindScreenSize = ({
       setHasTailwind(tailwindDetected);
     }
   }, []);
-  useEffect(() => {
+  (0, import_react.useEffect)(() => {
     if (!mounted)
       return;
     const updateDimensions = () => {
@@ -300,10 +339,10 @@ var TailwindScreenSize = ({
     window.addEventListener("resize", updateDimensions);
     return () => window.removeEventListener("resize", updateDimensions);
   }, [mounted]);
-  useEffect(() => {
+  (0, import_react.useEffect)(() => {
     if (mounted && dimensions) {
       const current = allBreakpoints.slice().reverse().find((breakpoint) => dimensions.width >= breakpoint.minWidth);
-      setCurrentBreakpoint(current?.screenTitle || "");
+      setCurrentBreakpoint((current == null ? void 0 : current.screenTitle) || "");
     }
   }, [dimensions, allBreakpoints, mounted]);
   if (!mounted || !dimensions)
@@ -314,10 +353,10 @@ var TailwindScreenSize = ({
     return null;
   const { width, height } = dimensions;
   const themeStyles = themeClasses[theme];
-  return /* @__PURE__ */ React.createElement(
+  return /* @__PURE__ */ import_react.default.createElement(
     "div",
     {
-      className: twMerge(
+      className: (0, import_tailwind_merge.twMerge)(
         baseClasses.container,
         positionClasses[position],
         themeStyles.container,
@@ -325,38 +364,39 @@ var TailwindScreenSize = ({
         className
       )
     },
-    /* @__PURE__ */ React.createElement("span", { className: twMerge(themeStyles.text, textClassName) }, width.toLocaleString(), " \xD7 ", height.toLocaleString()),
-    /* @__PURE__ */ React.createElement(
+    /* @__PURE__ */ import_react.default.createElement("span", { className: (0, import_tailwind_merge.twMerge)(themeStyles.text, textClassName) }, width.toLocaleString(), " \xD7 ", height.toLocaleString()),
+    /* @__PURE__ */ import_react.default.createElement(
       "div",
       {
-        className: twMerge(
+        className: (0, import_tailwind_merge.twMerge)(
           baseClasses.divider,
           themeStyles.divider,
           dividerClassName
         )
       }
     ),
-    /* @__PURE__ */ React.createElement("span", { className: twMerge(themeStyles.breakpoint, breakpointClassName) }, currentBreakpoint),
-    !hasTailwind && !hideNoTailwindCSSWarning && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(
+    /* @__PURE__ */ import_react.default.createElement("span", { className: (0, import_tailwind_merge.twMerge)(themeStyles.breakpoint, breakpointClassName) }, currentBreakpoint),
+    !hasTailwind && !hideNoTailwindCSSWarning && /* @__PURE__ */ import_react.default.createElement(import_react.default.Fragment, null, /* @__PURE__ */ import_react.default.createElement(
       "div",
       {
-        className: twMerge(
+        className: (0, import_tailwind_merge.twMerge)(
           baseClasses.divider,
           themeStyles.divider,
           dividerClassName
         )
       }
-    ), /* @__PURE__ */ React.createElement(
+    ), /* @__PURE__ */ import_react.default.createElement(
       "span",
       {
-        className: twMerge(themeStyles.breakpoint, breakpointClassName)
+        className: (0, import_tailwind_merge.twMerge)(themeStyles.breakpoint, breakpointClassName)
       },
       "No TailwindCSS Detected"
     ))
   );
 };
-export {
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
   TailwindScreenSize,
   detectTailwind,
   showTailwindWarning
-};
+});
