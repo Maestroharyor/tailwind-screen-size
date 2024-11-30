@@ -1,6 +1,6 @@
 {
   "name": "tailwind-screen-size",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A framework-agnostic screen size indicator optimized for TailwindCSS but customizable for any CSS framework. Features real-time dimensions, breakpoints, themes, and development tools.",
   "main": "./react/index.js",
   "module": "./react/index.mjs",
@@ -28,7 +28,10 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "lint:fix": "eslint \"src/**/*.{ts,tsx}\" --fix",
+    "prepare": "husky"
   },
   "keywords": [
     "react",
@@ -52,14 +55,21 @@
     "tailwind-merge": ">=1.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.16.0",
     "@swc/core": "^1.9.3",
     "@types/node": "^20.8.2",
     "@types/react": "^18.2.24",
+    "@typescript-eslint/eslint-plugin": "^8.16.0",
+    "@typescript-eslint/parser": "^8.16.0",
+    "eslint": "^9.16.0",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "globals": "^15.12.0",
     "react": "^18.2.0",
     "tsup": "^7.2.0",
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "tailwind-merge": "^2.5.5"
+    "tailwind-merge": ">=1.0.0"
   }
 }
