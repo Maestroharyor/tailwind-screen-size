@@ -1,9 +1,13 @@
 "use client";
 import React, { useEffect, useState, useMemo } from "react";
 import { twMerge } from "tailwind-merge";
-import type { Position, Theme, TailwindScreenSizeProps, Breakpoint } from "../types";
-import { detectTailwind } from "./utils";
-import "./styles.css";
+import type {
+  Position,
+  Theme,
+  TailwindScreenSizeProps,
+  Breakpoint,
+} from "../types";
+import { detectTailwind } from "../utils";
 
 const positionClasses: Record<Position, string> = {
   "top-left": "top-5 left-5",
@@ -191,7 +195,7 @@ const defaultBreakpoints: Breakpoint[] = [
 ];
 
 const isDevelopment = () => {
-  if (typeof process === 'undefined') return false;
+  if (typeof process === "undefined") return false;
   return process.env.NODE_ENV === "development";
 };
 
@@ -215,7 +219,10 @@ export const TailwindScreenSize: React.FC<TailwindScreenSizeProps> = ({
   hideNoTailwindCSSWarning = false,
 }) => {
   const [mounted, setMounted] = useState(false);
-  const [dimensions, setDimensions] = useState<{ width: number; height: number } | null>(null);
+  const [dimensions, setDimensions] = useState<{
+    width: number;
+    height: number;
+  } | null>(null);
   const [currentBreakpoint, setCurrentBreakpoint] = useState<string>("");
   const [hasTailwind, setHasTailwind] = useState(true);
   const [isDevMode, setIsDevMode] = useState(false);
@@ -231,9 +238,9 @@ export const TailwindScreenSize: React.FC<TailwindScreenSizeProps> = ({
   useEffect(() => {
     setMounted(true);
     setIsDevMode(isDevelopment());
-    
+
     // Only run Tailwind detection on client
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const tailwindDetected = detectTailwind();
       setHasTailwind(tailwindDetected);
     }

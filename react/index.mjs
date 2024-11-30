@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { twMerge } from "tailwind-merge";
 
-// src/react/utils.ts
+// src/utils/index.ts
 function detectTailwind() {
   if (typeof window === "undefined")
     return true;
@@ -70,7 +70,6 @@ Visit https://tailwindcss.com/docs/installation for installation instructions.`,
 }
 
 // src/react/TailwindScreenSize.tsx
-import "./styles-S4FDM4XE.css";
 var positionClasses = {
   "top-left": "top-5 left-5",
   "top-right": "top-5 right-5",
