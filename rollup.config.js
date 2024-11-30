@@ -34,7 +34,7 @@ export default {
     commonjs(),
     typescript({
       sourceMap: true,
-      include: ['src/**/*.ts', 'src/**/*.svelte'],
+      include: ['src/svelte/**/*.ts', 'src/svelte/**/*.svelte', 'src/types/**/*.ts', 'src/utils/**/*.ts'],
       tsconfig: './tsconfig.json',
       outputToFilesystem: true,
       declarationDir: './svelte'

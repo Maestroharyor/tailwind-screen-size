@@ -79,6 +79,21 @@ function App() {
 }
 ```
 
+### Svelte (Beta)
+
+> ⚠️ **Note**: The Svelte implementation is currently in beta and may have some instability. However, it works seamlessly with both Svelte 4 and Svelte 5 (runes) out of the box!
+
+```svelte
+<script>
+  import { TailwindScreenSize } from "tailwind-screen-size/svelte";
+</script>
+
+<div>
+  <TailwindScreenSize />
+  <!-- Your app content -->
+</div>
+```
+
 ### ⚙️ Props
 
 | Prop                       | Type                                                                                              | Default                                         | Description                                                          |
@@ -122,7 +137,6 @@ function App() {
   dividerClassName="custom-divider-class"
   breakpointClassName="custom-breakpoint-class"
 />
-```
 
 ### 🎭 Available Themes
 
@@ -176,7 +190,6 @@ const defaultBreakpoints = [
   { screenTitle: "XL", minWidth: 1280 },
   { screenTitle: "2XL", minWidth: 1536 },
 ];
-```
 
 ## 🔧 Development Mode
 
@@ -188,7 +201,6 @@ By default, the component only shows in development mode (`process.env.NODE_ENV 
 
 // Never show
 <TailwindScreenSize show={false} />
-```
 
 ## 📄 License
 

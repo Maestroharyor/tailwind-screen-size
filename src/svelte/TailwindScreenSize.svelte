@@ -1,27 +1,29 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { twMerge } from 'tailwind-merge';
-	import type { Position, Theme, Breakpoint } from '../types';
+	import type { Position, Theme, Breakpoint, TailwindScreenSizeProps } from '../types';
 	import { detectTailwind } from '../utils';
 
 	// Props
-	export let className = '';
-	export let position: Position = 'bottom-right';
-	export let theme: Theme = 'dark';
-	export let show: boolean | undefined = undefined;
-	export let containerClassName = '';
-	export let textClassName = '';
-	export let dividerClassName = '';
-	export let breakpointClassName = '';
-	export let breakpoints: Breakpoint[] | undefined = undefined;
-	export let showDefaultBreakpoints = true;
-	export let hideNoTailwindCSSWarning = false;
+	const {
+		className = '',
+		position = /** @type {Position} */ ('bottom-right'),
+		theme = /** @type {Theme} */ ('dark'),
+		show = /** @type {boolean | undefined} */ (undefined),
+		containerClassName = '',
+		textClassName = '',
+		dividerClassName = '',
+		breakpointClassName = '',
+		breakpoints = /** @type {Breakpoint[] | undefined} */ (undefined),
+		showDefaultBreakpoints = true,
+		hideNoTailwindCSSWarning = false
+	}: TailwindScreenSizeProps = $props();
 
 	// State
-	let currentBreakpoint = '';
-	let width = 0;
-	let isTailwindDetected = true;
-	let mounted = false;
+	let currentBreakpoint = $state('');
+	let width = $state(0);
+	let isTailwindDetected = $state(false);
+	let mounted = $state(false);
 
 	const positionClasses: Record<Position, string> = {
 		'top-left': 'top-5 left-5',
@@ -224,22 +226,46 @@
 	}
 
 	// Derived values
-	$: shouldShow = show ?? isDevelopment();
-	$: activeBreakpoints = breakpoints || (showDefaultBreakpoints ? defaultBreakpoints : []);
-	$: containerClassNames = twMerge(
-		baseClasses.container,
-		themeClasses[theme].container,
-		positionClasses[position],
-		containerClassName,
-		className
+	// $: shouldShow = show ?? isDevelopment();
+	const shouldShow = $derived(show ?? isDevelopment());
+	// $: activeBreakpoints = breakpoints || (showDefaultBreakpoints ? defaultBreakpoints : []);
+	const activeBreakpoints = $derived(
+		breakpoints || (showDefaultBreakpoints ? defaultBreakpoints : [])
 	);
-	$: textClassNames = twMerge(themeClasses[theme].text, textClassName);
-	$: dividerClassNames = twMerge(
-		baseClasses.divider,
-		themeClasses[theme].divider,
-		dividerClassName
+	// $: containerClassNames = twMerge(
+	// 	baseClasses.container,
+	// 	themeClasses[theme].container,
+	// 	positionClasses[position],
+	// 	containerClassName,
+	// 	className
+	// );
+	const containerClassNames = $derived(
+		twMerge(
+			baseClasses.container,
+			themeClasses[theme].container,
+			positionClasses[position],
+			containerClassName,
+			className
+		)
 	);
-	$: breakpointClassNames = twMerge(themeClasses[theme].breakpoint, breakpointClassName);
+	// $: textClassNames = twMerge(themeClasses[theme].text, textClassName);
+	const textClassNames = $derived(twMerge(themeClasses[theme].text, textClassName));
+	// $: dividerClassNames = twMerge(
+	// 	baseClasses.divider,
+	// 	themeClasses[theme].divider,
+	// 	dividerClassName
+	// );
+	const dividerClassNames = $derived(
+		twMerge(baseClasses.divider, themeClasses[theme].divider, dividerClassName)
+	);
+	// $: breakpointClassNames = twMerge(
+	// 	themeClasses[theme].breakpoint,
+	// 	breakpointClassName
+	// );
+	const breakpointClassNames = $derived(
+		twMerge(themeClasses[theme].breakpoint, breakpointClassName)
+	);
+	// $: breakpointClassNames = twMerge(themeClasses[theme].breakpoint, breakpointClassName);
 
 	// Lifecycle
 	onMount(() => {
