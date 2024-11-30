@@ -1,12 +1,7 @@
 "use client";
 import React, { useEffect, useState, useMemo } from "react";
 import { twMerge } from "tailwind-merge";
-import type {
-  Position,
-  Theme,
-  TailwindScreenSizeProps,
-  Breakpoint,
-} from "./types";
+import type { Position, Theme, TailwindScreenSizeProps, Breakpoint } from "../types";
 import { detectTailwind } from "./utils";
 import "./styles.css";
 
