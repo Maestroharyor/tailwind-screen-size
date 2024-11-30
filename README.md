@@ -2,6 +2,8 @@
 
 A lightweight, framework-agnostic component that helps you visualize your screen size and breakpoints during development. While it's optimized for TailwindCSS, it can be customized to work with any CSS framework or vanilla CSS!
 
+[![npm version](https://badge.fury.io/js/tailwind-screen-size.svg)](https://www.npmjs.com/package/tailwind-screen-size)
+
 ## ✨ Features
 
 - 📏 Show different screen sizes you're on for TailwindCSS
@@ -137,6 +139,7 @@ function App() {
   dividerClassName="custom-divider-class"
   breakpointClassName="custom-breakpoint-class"
 />
+```
 
 ### 🎭 Available Themes
 
@@ -190,6 +193,7 @@ const defaultBreakpoints = [
   { screenTitle: "XL", minWidth: 1280 },
   { screenTitle: "2XL", minWidth: 1536 },
 ];
+```
 
 ## 🔧 Development Mode
 
@@ -201,6 +205,7 @@ By default, the component only shows in development mode (`process.env.NODE_ENV 
 
 // Never show
 <TailwindScreenSize show={false} />
+```
 
 ## 📄 License
 
